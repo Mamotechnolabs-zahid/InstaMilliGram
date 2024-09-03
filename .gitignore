@@ -1,5 +1,5 @@
 # Ignore GoogleService-Info.plist file
-GoogleService-Info.plist
+/Users/yaksh/GitHub/InstaMilliGram/instamilligram/ios/Runner/GoogleService-Info.plist
 
 # Ignore google-services.json file
 google-services.json
