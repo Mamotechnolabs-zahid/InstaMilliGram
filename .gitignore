@@ -1,0 +1,8 @@
+# Ignore GoogleService-Info.plist file
+GoogleService-Info.plist
+
+# Ignore google-services.json file
+google-services.json
+
+# Ignore config.js file
+config.js
