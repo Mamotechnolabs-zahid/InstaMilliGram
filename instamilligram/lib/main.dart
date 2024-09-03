@@ -1,10 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:instamilligram/Utilities/colors.dart';
 import 'package:instamilligram/responsive/mobile_screen_layout.dart';
 import 'package:instamilligram/responsive/responsive_layout_screen.dart';
 import 'package:instamilligram/responsive/web_screen_layout.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();// let the widgets be built
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
