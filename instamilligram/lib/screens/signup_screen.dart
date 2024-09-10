@@ -4,11 +4,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instamilligram/resources/auth_methods.dart';
 import 'package:instamilligram/responsive/mobile_screen_layout.dart';
-import 'package:instamilligram/responsive/responsive_layout_screen.dart';
+import 'package:instamilligram/responsive/responsive_layout.dart';
 import 'package:instamilligram/responsive/web_screen_layout.dart';
 import 'package:instamilligram/screens/login_screen.dart';
-import 'package:instamilligram/utilities/colors.dart';
-import 'package:instamilligram/utilities/utils.dart';
+import 'package:instamilligram/utils/colors.dart';
+import 'package:instamilligram/utils/utils.dart';
 import 'package:instamilligram/widgets/text_field_input.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -22,7 +22,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _bioController = TextEditingController(); //to add bio
+  final TextEditingController _bioController = TextEditingController();
   bool _isLoading = false;
   Uint8List? _image;
 
@@ -105,7 +105,6 @@ class _SignupScreenState extends State<SignupScreen> {
               const SizedBox(
                 height: 64,
               ),
-              //circle Avatar
               Stack(
                 children: [
                   _image != null
@@ -116,7 +115,8 @@ class _SignupScreenState extends State<SignupScreen> {
                         )
                       : const CircleAvatar(
                           radius: 64,
-                          backgroundImage: NetworkImage('https://i.stack.imgur.com/l60Hf.png'),
+                          backgroundImage: NetworkImage(
+                              'https://i.stack.imgur.com/l60Hf.png'),
                           backgroundColor: Colors.red,
                         ),
                   Positioned(
