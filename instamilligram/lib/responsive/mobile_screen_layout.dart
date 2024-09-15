@@ -42,10 +42,11 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     return Scaffold(
       body: PageView(
         controller: pageController,
+        physics: const NeverScrollableScrollPhysics(),
         onPageChanged: onPageChanged,
         children: homeScreenItems,
       ),
-      bottomNavigationBar: CupertinoTabBar(
+      bottomNavigationBar: CupertinoTabBar( //ios based bottom nav
         backgroundColor: mobileBackgroundColor,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(

@@ -4,9 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instamilligram/providers/user_provider.dart';
 import 'package:instamilligram/resources/firestore_methods.dart';
+import 'package:instamilligram/responsive/mobile_screen_layout.dart';
+import 'package:instamilligram/responsive/responsive_layout.dart';
+import 'package:instamilligram/responsive/web_screen_layout.dart';
 import 'package:instamilligram/utils/colors.dart';
 import 'package:instamilligram/utils/utils.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/cupertino.dart';
 
 class AddPostScreen extends StatefulWidget {
   const AddPostScreen({Key? key}) : super(key: key);
@@ -21,40 +25,39 @@ class _AddPostScreenState extends State<AddPostScreen> {
   final TextEditingController _descriptionController = TextEditingController();
 
   _selectImage(BuildContext parentContext) async {
-    return showDialog(
+    return showCupertinoModalPopup(
       context: parentContext,
       builder: (BuildContext context) {
-        return SimpleDialog(
+        return CupertinoActionSheet(
           title: const Text('Create a Post'),
-          children: <Widget>[
-            SimpleDialogOption(
-                padding: const EdgeInsets.all(20),
-                child: const Text('Take a photo'),
-                onPressed: () async {
-                  Navigator.pop(context);
-                  Uint8List file = await pickImage(ImageSource.camera);
-                  setState(() {
-                    _file = file;
-                  });
-                }),
-            SimpleDialogOption(
-                padding: const EdgeInsets.all(20),
-                child: const Text('Choose from Gallery'),
-                onPressed: () async {
-                  Navigator.of(context).pop();
-                  Uint8List file = await pickImage(ImageSource.gallery);
-                  setState(() {
-                    _file = file;
-                  });
-                }),
-            SimpleDialogOption(
-              padding: const EdgeInsets.all(20),
-              child: const Text("Cancel"),
-              onPressed: () {
+          actions: <Widget>[
+            CupertinoActionSheetAction(
+              onPressed: () async {
                 Navigator.pop(context);
+                Uint8List file = await pickImage(ImageSource.camera);
+                setState(() {
+                  _file = file;
+                });
               },
-            )
+              child: const Text('Take a photo'),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () async {
+                Navigator.pop(context);
+                Uint8List file = await pickImage(ImageSource.gallery);
+                setState(() {
+                  _file = file;
+                });
+              },
+              child: const Text('Choose from Gallery'),
+            ),
           ],
+          cancelButton: CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Cancel'),
+          ),
         );
       },
     );
@@ -85,6 +88,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
           );
         }
         clearImage();
+        Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const ResponsiveLayout(mobileScreenLayout: MobileScreenLayout(),webScreenLayout: WebScreenLayout(),),
+                      ),
+                    );
       } else {
         if (context.mounted) {
           showSnackBar(context, res);
@@ -134,7 +142,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 onPressed: clearImage,
               ),
               title: const Text(
-                'Post to',
+                'New Post',
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
               centerTitle: false,
               actions: <Widget>[
@@ -145,60 +154,82 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     userProvider.getUser.photoUrl,
                   ),
                   child: const Text(
-                    "Post",
-                    style: TextStyle(
-                        color: Colors.blueAccent,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.0),
+                    "Share",
+                    style: TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.bold, fontSize: 16.0),
                   ),
                 )
               ],
             ),
-            // POST FORM
-            body: Column(
-              children: <Widget>[
-                isLoading
-                    ? const LinearProgressIndicator()
-                    : const Padding(padding: EdgeInsets.only(top: 0.0)),
-                const Divider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    CircleAvatar(
-                      backgroundImage: NetworkImage(
-                        userProvider.getUser.photoUrl,
-                      ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      child: TextField(
-                        controller: _descriptionController,
-                        decoration: const InputDecoration(
-                            hintText: "Write a caption...",
-                            border: InputBorder.none),
-                        maxLines: 8,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 45.0,
-                      width: 45.0,
-                      child: AspectRatio(
-                        aspectRatio: 487 / 451,
-                        child: Container(
-                          decoration: BoxDecoration(
+            body: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                children: <Widget>[
+                  isLoading ? const LinearProgressIndicator() : const Padding(padding: EdgeInsets.only(top: 0.0)),
+                  const Divider(),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 100.0,
+                        width: 100.0,
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: Container(
+                            decoration: BoxDecoration(
                               image: DecorationImage(
-                            fit: BoxFit.fill,
-                            alignment: FractionalOffset.topCenter,
-                            image: MemoryImage(_file!),
-                          )),
+                                fit: BoxFit.cover,
+                                image: MemoryImage(_file!),
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                const Divider(),
-              ],
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: TextField(
+                          controller: _descriptionController,
+                          decoration: const InputDecoration(
+                            hintText: "Write a caption...",
+                            border: InputBorder.none,
+                          ),
+                          maxLines: 3,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Divider(),
+                  // Buttons for additional features
+                  ListTile(
+                    leading: const Icon(Icons.person_add),
+                    title: const Text('Tag People'),
+                    onTap: () {
+                      // Add functionality for tagging people
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.music_note),
+                    title: const Text('Add Music'),
+                    onTap: () {
+                      // Add functionality for adding music
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.location_on),
+                    title: const Text('Add Location'),
+                    onTap: () {
+                      // Add functionality for adding location
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.settings),
+                    title: const Text('Advanced Settings'),
+                    onTap: () {
+                      // Add functionality for advanced settings
+                    },
+                  ),
+                ],
+              ),
             ),
           );
   }

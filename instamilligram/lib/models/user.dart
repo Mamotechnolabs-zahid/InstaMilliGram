@@ -32,6 +32,7 @@ class User {
     );
   }
 
+  //converting user data into object file to use it
   Map<String, dynamic> toJson() => {
         "username": username,
         "uid": uid,

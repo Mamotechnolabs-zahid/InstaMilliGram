@@ -17,12 +17,11 @@ void main() async {
   if (kIsWeb) {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
-        apiKey: "AIzaSyCZ-xrXqD5D19Snauto-Fx_nLD7PLrBXGM",
-        appId: "1:585119731880:web:eca6e4b3c42a755cee329d",
-        messagingSenderId: "585119731880",
-        projectId: "instagram-clone-4cea4",
-        storageBucket: 'instagram-clone-4cea4.appspot.com'
-      ),
+          apiKey: "AIzaSyCZ-xrXqD5D19Snauto-Fx_nLD7PLrBXGM",
+          appId: "1:585119731880:web:eca6e4b3c42a755cee329d",
+          messagingSenderId: "585119731880",
+          projectId: "instagram-clone-4cea4",
+          storageBucket: 'instagram-clone-4cea4.appspot.com'),
     );
   } else {
     await Firebase.initializeApp();
@@ -35,18 +34,27 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //Mutliprovider takes in list of Providers and it is one time setup
+    //rather than using  consumer everywhere
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => UserProvider(),),
+        //change notifier takes in our provider
+        ChangeNotifierProvider(
+          create: (_) => UserProvider(), //we created this user provider
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Instagram Clone',
+        title: 'InstaMilliGram',
         theme: ThemeData.dark().copyWith(
           scaffoldBackgroundColor: mobileBackgroundColor,
         ),
+        //persistant login of user
         home: StreamBuilder(
+          //.authStateChanges Runs only when the user signs in or out.
           stream: FirebaseAuth.instance.authStateChanges(),
+
+          ///idTokenChanges and //userChanges
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.active) {
               // Checking if the snapshot has any data or not
@@ -66,10 +74,13 @@ class MyApp extends StatelessWidget {
             // means connection to future hasnt been made yet
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  color: primaryColor,
+                ),
               );
             }
 
+            // if snapshot doesnt have data then this will run ie login screen
             return const LoginScreen();
           },
         ),
