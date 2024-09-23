@@ -1,6 +1,8 @@
 # Ignore GoogleService-Info.plist file
 /Users/yaksh/GitHub/InstaMilliGram/instamilligram/ios/Runner/GoogleService-Info.plist
 
+/Users/yaksh/GitHub/InstaMilliGram/instamilligram/lib/firebase_options.dart
+
 # Ignore google-services.json file
 google-services.json
 
