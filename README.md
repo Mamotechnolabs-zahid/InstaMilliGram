@@ -81,6 +81,3 @@ For any questions or suggestions, please reach out to us:
 - **Email**: yakshdalwadi1002@gmail.com
 - **LinkedIn**: [Yakshraj](https://www.linkedin.com/in/yakshraj-dalwadi-85a940248/)
 
----
-
-Make sure to replace placeholders like `yourusername` and `your.email@example.com` with your actual information. You can also add screenshots in the designated section by uploading them to the repository and linking to them.
